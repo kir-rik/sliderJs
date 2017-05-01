@@ -1,0 +1,1 @@
+sliderJsModule.createSlider('someFancyPictures', 'slideMeId');

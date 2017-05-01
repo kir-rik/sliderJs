@@ -3,12 +3,13 @@ const sliderJsModule = (function(){
         createSlider: createSlider
     }
     /**
-     * creates slider from content of container with containerId Id
+     * creates slider in container with tragetId Id from content of container with sourceId Id 
      * @function
-     * @param {*} containerId
+     * @param {*} tragetId
+     * @param {*} sourceId
      */
-    function createSlider(containerId){
-
+    function createSlider(tragetId, sourceId){
+        console.log('slide this!', tragetId, containerId);
     }
 
 })();
