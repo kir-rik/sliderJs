@@ -1,0 +1,17 @@
+.slider-slide-button{
+    width:50%;
+    height:100%;
+    z-index:3;
+    position: absolute;
+    top: 0;
+}
+
+.slider-noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}

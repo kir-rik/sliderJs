@@ -1,1 +1,3 @@
-sliderJsModule.createSlider('someFancyPictures', 'slideMeId');
+document.addEventListener("DOMContentLoaded", function(event) { 
+    sliderJsModule.createSlider('someFancyPictures', {});    
+});
