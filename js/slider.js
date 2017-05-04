@@ -4,27 +4,30 @@ var sliderJsModule = (function(){
         createSlider: createSlider
     }
 
-    var currentIndex;
-    var imgsCollection;
+    // var currentIndex;
+    // var imgsCollection;
 
     /**
      * creates slider
      * @function
      * @param {string} sourceId - slider container id
      * @param {Object} config - configuration object
-     * @param {number} config.width - Set width of the slideshow.
-     * @param {number} config.height - Set height of the slideshow.
-     * @param {number} config.start - Set the first slide in the slideshow
+     * @param {number} config.width - Set width of the slideshow 
+     * @param {number} config.height - Set height of the slideshow 
+     * @param {number} config.start - Set the first slide in the slideshow 
      */
     function createSlider(sourceId, config){
 
-        currentIndex = (config.start || 1 ) - 1;
+        var currentIndex = (config.start || 1 ) - 1;
 
         var container = document.getElementById(sourceId);
         setupContainer(container, config);
 
-        imgsCollection = getImgs(container);
+        var imgsCollection = getImgs(container);
         setupImgs(imgsCollection, config);
+
+        container.dataset.currentIndex = currentIndex;
+        // container.dataset.imgsCollection = imgsCollection;
 
         for (var i = 0; i < imgsCollection.length; i++) {
             hide(imgsCollection[i]);
@@ -35,23 +38,25 @@ var sliderJsModule = (function(){
     }
 
     function next(){
-        hide( imgsCollection[currentIndex] );
-        if ( currentIndex < imgsCollection.length -1 ){
-            currentIndex++;
+        var imgsCollection = getImgs(this.parentNode);
+        hide( imgsCollection[this.parentNode.dataset.currentIndex] );
+        if ( this.parentNode.dataset.currentIndex < imgsCollection.length -1 ){
+            this.parentNode.dataset.currentIndex++;
         } else {
-            currentIndex = 0;
+            this.parentNode.dataset.currentIndex = 0;
         }
-        show( imgsCollection[currentIndex] );
+        show( imgsCollection[this.parentNode.dataset.currentIndex] );
     }
 
     function prev(){
-        hide( imgsCollection[currentIndex] );
-        if ( currentIndex > 0 ){
-            currentIndex--;
+        var imgsCollection = getImgs(this.parentNode);
+        hide( imgsCollection[this.parentNode.dataset.currentIndex] );
+        if ( this.parentNode.dataset.currentIndex > 0 ){
+            this.parentNode.dataset.currentIndex--;
         } else {
-            currentIndex = imgsCollection.length - 1;
+            this.parentNode.dataset.currentIndex = imgsCollection.length - 1;
         }
-        show( imgsCollection[currentIndex] );
+        show( imgsCollection[this.parentNode.dataset.currentIndex] );
     }
 
     function hide(elem){
