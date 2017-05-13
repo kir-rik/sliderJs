@@ -4,7 +4,9 @@ var sliderJsModule = (function(){
 
         constructor(sourceId, config){
             this.config = config;
-            this.currentIndex = (config.start || 1 ) - 1;        
+            this.currentIndex = (config.start || 1 ) - 1;               
+            this.isAutoplay = config.autoplay || config.autoplay == undefined;
+            this.autoplayInterval = config.autoplayInterval || 3000;     
             
             this.container = document.getElementById(sourceId);
             this.setupContainer();
@@ -19,9 +21,11 @@ var sliderJsModule = (function(){
 
             this.addSlideButtons();
 
-            this.autoplayInterval = config.autoplayInterval || 3000;
+            if (!config.hideControls){
+                this.addControlsBar();
+            }
 
-            if (config.autoplay || config.autoplay == undefined ){
+            if (this.isAutoplay){
                 this.autoplayTimerId = this.startAutoplay();
             }
 
@@ -58,7 +62,7 @@ var sliderJsModule = (function(){
         getElements() {
             var elements = [];
             for (var i = 0; i < this.container.childNodes.length; i++) {
-                if (this.container.childNodes[i].tagName == 'IMG'){
+                if (this.container.childNodes[i].nodeType == 1){
                     elements.push(this.container.childNodes[i]);
                 }
             }
@@ -111,6 +115,34 @@ var sliderJsModule = (function(){
             
         }
 
+        addControlsBar() {
+            var self = this;
+
+            var controlsBar = document.createElement('div');  
+            controlsBar.classList.add("slider-controls-bar");
+
+            this.autoplayButton = document.createElement('a');
+            this.autoplayButton.appendChild(document.createElement('div'));  
+            this.autoplayButton.classList.add("slider-controls-bar-button");
+            this.autoplayButton.classList.add(
+                this.isAutoplay ? 
+                "slider-controls-bar-button-stop" : 
+                "slider-controls-bar-button-start"
+                );
+
+            this.autoplayButton.onclick = function(){
+                self.autoplayButtonClick();
+            };
+
+            var counter = document.createElement('span');  
+            counter.classList.add('slider-counter')
+            counter.innerText = `${this.currentIndex+1} / ${this.elementsCollection.length}`;
+
+            controlsBar.appendChild(this.autoplayButton);
+
+            this.container.appendChild(controlsBar);
+        }
+        
         startAutoplay(){
             var self = this;
             return this.autoplayIntervalId = setInterval(function(){
@@ -124,15 +156,26 @@ var sliderJsModule = (function(){
             }
         }
 
+        autoplayButtonClick(){
+            
+            if (this.isAutoplay){
+                this.stopAutoplay();
+                this.autoplayButton.classList.add('slider-controls-bar-button-start');
+                this.autoplayButton.classList.remove('slider-controls-bar-button-stop');
+            } else {
+                this.autoplayTimerId = this.startAutoplay();
+                this.autoplayButton.classList.add('slider-controls-bar-button-stop');
+                this.autoplayButton.classList.remove('slider-controls-bar-button-start');
+            }
+
+            this.isAutoplay = !this.isAutoplay;
+        }
+
     }
 
     return {
         createSlider: createSlider
     }
-
-    // var currentIndex;
-    // var elementsCollection;
-
     /**
      * creates slider
      * @function
@@ -143,105 +186,12 @@ var sliderJsModule = (function(){
      * @param {number} config.start - Set the first slide in the slideshow
      * @param {boolean} config.autoplay - Set the slides autoplay
      * @param {number} config.autoplayInterval - Set the slides autoplay inteval, ms
+     * @param {boolean} config.hideControls - Hide controls bar
      */
     function createSlider(sourceId, config) {
-        
         return new SliderJs(sourceId, config);
-
-
-        //currentIndex = (config.start || 1 ) - 1;
-
-        //var container = document.getElementById(sourceId);
-        //setupContainer(container, config);
-
-        //elementsCollection = getImgs(container);
-        //setupImgs(elementsCollection, config);
-
-        // for (var i = 0; i < elementsCollection.length; i++) {
-        //     hide(elementsCollection[i]);
-        // }
-        // show(elementsCollection[currentIndex]);
-
-        // addSlideButtons(container);
     }
 
-    // function next(){
-    //     hide( elementsCollection[currentIndex] );
-    //     if ( currentIndex < elementsCollection.length -1 ){
-    //         currentIndex++;
-    //     } else {
-    //         currentIndex = 0;
-    //     }
-    //     show( elementsCollection[currentIndex] );
-    // }
 
-    // function prev(){
-    //     hide( elementsCollection[currentIndex] );
-    //     if ( currentIndex > 0 ){
-    //         currentIndex--;
-    //     } else {
-    //         currentIndex = elementsCollection.length - 1;
-    //     }
-    //     show( elementsCollection[currentIndex] );
-    // }
-
-    // function hide(elem){
-    //     elem.style.display = 'none'
-    // }
-
-    // function show(elem){
-    //     elem.style.display = 'block'
-    // }
-
-    // function getImgs(container){
-    //     var imgs = [];
-    //     for (var i = 0; i < container.childNodes.length; i++) {
-    //         if (container.childNodes[i].tagName == 'IMG'){
-    //             imgs.push(container.childNodes[i]);
-    //         }
-    //     }
-    //     return imgs;
-    // }
-
-    // function setupContainer(container, config){
-    //     container.classList.add("slider-container");
-    //     if (config.width) {
-    //         container.style.width = config.width+'px';
-    //     }
-    //     if (config.height) {
-    //         container.style.height = config.height+'px';
-    //     }
-    // }
-
-    // function setupImgs( elementsCollection, config ){
-    //     for (var i = 0; i < elementsCollection.length; i++) {
-    //         elementsCollection[i].classList.add("slider-element");
-    //         if (config.width) {
-    //             elementsCollection[i].style.width = config.width+'px';
-    //         }
-    //         if (config.height) {
-    //             elementsCollection[i].style.height = config.height+'px';
-    //         }
-    //     }
-    // }
-
-    // function addSlideButtons(container){
-        
-    //     var left = document.createElement('div');
-    //     left.classList.add("slider-slide-button");
-    //     left.classList.add("slider-noselect");
-    //     left.style.left='0';
-    //     left.onclick=prev;
-        
-    //     var right = document.createElement('div');
-    //     right.classList.add("slider-slide-button");
-    //     right.classList.add("slider-noselect");
-    //     right.style.right='0';
-    //     right.onclick=next;
-
-    //     container.appendChild(left);
-    //     container.appendChild(right);
-        
-    // }
 
 })();

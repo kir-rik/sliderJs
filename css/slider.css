@@ -29,3 +29,48 @@
     width: 1024px;
     height: 758px;
 }
+
+.slider-container .slider-controls-bar{
+    transition: opacity .5s cubic-bezier(0.0,0.0,0.2,1);
+    padding: 4px 8px;
+    height: 32px;  
+    background-color: #000000;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    box-sizing: border-box;
+    opacity: 0;
+    z-index: -1;
+}
+
+.slider-container .slider-controls-bar {
+    opacity: 0.5;
+    z-index: 4;
+}
+
+.slider-controls-bar-button > div {
+    z-index: 5;
+}
+
+.slider-controls-bar-button-start >  div {
+    height: 0; 
+    width: 0; 
+    transition: border-left .25s cubic-bezier(0.0,0.0,0.2,1);
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+    border-left: 18px solid #ffffff;
+}
+
+.slider-controls-bar-button-stop > div {
+    height: 24px; 
+    width: 6px; 
+    transition: width .25s cubic-bezier(0.0,0.0,0.2,1);
+    border-top: none;
+    border-bottom: none;
+    border-left: 8px solid #ffffff;
+    border-right: 8px solid #ffffff;
+}
+
+.slider-counter {
+  
+}
