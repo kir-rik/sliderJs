@@ -1,7 +1,21 @@
-var sliderJsModule = (function(){
+(function(){
 
+    /**
+     * Turns container into slider
+     */
     class SliderJs {
 
+        /**
+         * Turns container into slider
+         * @param {string} sourceId - slider container id
+         * @param {Object} config - configuration object
+         * @param {number} config.width - Set width of the slideshow.
+         * @param {number} config.height - Set height of the slideshow.
+         * @param {number} config.start - Set the first slide in the slideshow
+         * @param {boolean} config.autoplay - Set the slides autoplay
+         * @param {number} config.autoplayInterval - Set the slides autoplay inteval, ms
+         * @param {boolean} config.hideControls - Hide controls bar
+         */
         constructor(sourceId, config){
             this.config = config;
             this.currentIndex = (config.start || 1 ) - 1;               
@@ -15,9 +29,9 @@ var sliderJsModule = (function(){
             this.setupElements();
 
             for (var i = 0; i < this.elementsCollection.length; i++) {
-                this.hide(this.elementsCollection[i]);
+                hide(this.elementsCollection[i]);
             }
-            this.show(this.elementsCollection[this.currentIndex]);
+            show(this.elementsCollection[this.currentIndex]);
 
             this.addSlideButtons();
 
@@ -32,33 +46,25 @@ var sliderJsModule = (function(){
         };
 
         next() {
-            this.hide( this.elementsCollection[this.currentIndex] );
+            hide( this.elementsCollection[this.currentIndex] );
             if ( this.currentIndex < this.elementsCollection.length -1 ) {
                 this.currentIndex++;
             } else {
                 this.currentIndex = 0;
             }
-            this.show( this.elementsCollection[this.currentIndex] );
-            this.setCounterSpanText();
+            show( this.elementsCollection[this.currentIndex] );
+            this.updateCounterSpanText();
         };
 
         prev() {
-            this.hide( this.elementsCollection[this.currentIndex] );
+            hide( this.elementsCollection[this.currentIndex] );
             if ( this.currentIndex > 0 ){
                 this.currentIndex--;
             } else {
                 this.currentIndex = this.elementsCollection.length - 1;
             }
-            this.show( this.elementsCollection[this.currentIndex] );
-            this.setCounterSpanText();
-        };
-
-        hide(elem) {
-            elem.style.display = 'none'
-        };
-
-        show(elem) {
-            elem.style.display = 'block'
+            show( this.elementsCollection[this.currentIndex] );
+            this.updateCounterSpanText();
         };
 
         getElements() {
@@ -74,7 +80,7 @@ var sliderJsModule = (function(){
         setupContainer() {
             this.container.classList.add("slider-container");
             this.container.classList.add('slider-noselect');
-            
+
             if (this.config.width) {
                 this.container.style.width = this.config.width+'px';
             }
@@ -142,7 +148,7 @@ var sliderJsModule = (function(){
             this.counterSpan.classList.add('slider-counter') ;
             this.counterSpan.classList.add('slider-noselect');
             
-            this.setCounterSpanText();
+            this.updateCounterSpanText();
 
             controlsBar.appendChild(this.autoplayButton);
             controlsBar.appendChild(this.counterSpan);
@@ -152,57 +158,50 @@ var sliderJsModule = (function(){
         
         startAutoplay(){
             var self = this;
+            
+            this.isAutoplay = true;
+
+            this.autoplayButton.classList.add('slider-controls-bar-button-stop');
+            this.autoplayButton.classList.remove('slider-controls-bar-button-start');
+
             return this.autoplayIntervalId = setInterval(function(){
                 self.next();
             }, this.autoplayInterval);
-        }
+        };
 
         stopAutoplay(){
+            this.isAutoplay = false;
+
+            this.autoplayButton.classList.add('slider-controls-bar-button-start');
+            this.autoplayButton.classList.remove('slider-controls-bar-button-stop');
+
             if (this.autoplayTimerId){
                 clearInterval(this.autoplayTimerId);
             }
-        }
+        };
 
         autoplayButtonClick(){
-            
             if (this.isAutoplay){
                 this.stopAutoplay();
-                this.autoplayButton.classList.add('slider-controls-bar-button-start');
-                this.autoplayButton.classList.remove('slider-controls-bar-button-stop');
             } else {
                 this.autoplayTimerId = this.startAutoplay();
-                this.autoplayButton.classList.add('slider-controls-bar-button-stop');
-                this.autoplayButton.classList.remove('slider-controls-bar-button-start');
             }
+        };
 
-            this.isAutoplay = !this.isAutoplay;
-        }
-
-        setCounterSpanText(){
+        updateCounterSpanText(){
             this.counterSpan.innerText = `${this.currentIndex+1} / ${this.elementsCollection.length}`;
-        }
+        };
 
     }
 
-    return {
-        createSlider: createSlider
-    }
-    /**
-     * creates slider
-     * @function
-     * @param {string} sourceId - slider container id
-     * @param {Object} config - configuration object
-     * @param {number} config.width - Set width of the slideshow.
-     * @param {number} config.height - Set height of the slideshow.
-     * @param {number} config.start - Set the first slide in the slideshow
-     * @param {boolean} config.autoplay - Set the slides autoplay
-     * @param {number} config.autoplayInterval - Set the slides autoplay inteval, ms
-     * @param {boolean} config.hideControls - Hide controls bar
-     */
-    function createSlider(sourceId, config) {
-        return new SliderJs(sourceId, config);
-    }
+    function hide(elem) {
+        elem.style.display = 'none'
+    };
 
+    function show(elem) {
+        elem.style.display = 'block'
+    };
 
+    window.SliderJs = SliderJs;
 
 })();

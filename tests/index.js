@@ -1,4 +1,4 @@
 document.addEventListener("DOMContentLoaded", function(event) { 
-    sliderJsModule.createSlider('someFancyPictures', {autoplay: true});    
-    // sliderJsModule.createSlider('someFancyPictures2', {});    
+    var slider1 = new SliderJs('someFancyPictures', {autoplay: true, autoplayInterval: 2000});    
+    // var slider2 = new SliderJs('someFancyPictures2', {autoplay: false});    
 });
