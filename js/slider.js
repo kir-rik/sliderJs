@@ -39,6 +39,7 @@ var sliderJsModule = (function(){
                 this.currentIndex = 0;
             }
             this.show( this.elementsCollection[this.currentIndex] );
+            this.setCounterSpanText();
         };
 
         prev() {
@@ -49,6 +50,7 @@ var sliderJsModule = (function(){
                 this.currentIndex = this.elementsCollection.length - 1;
             }
             this.show( this.elementsCollection[this.currentIndex] );
+            this.setCounterSpanText();
         };
 
         hide(elem) {
@@ -71,6 +73,8 @@ var sliderJsModule = (function(){
 
         setupContainer() {
             this.container.classList.add("slider-container");
+            this.container.classList.add('slider-noselect');
+            
             if (this.config.width) {
                 this.container.style.width = this.config.width+'px';
             }
@@ -134,11 +138,14 @@ var sliderJsModule = (function(){
                 self.autoplayButtonClick();
             };
 
-            var counter = document.createElement('span');  
-            counter.classList.add('slider-counter')
-            counter.innerText = `${this.currentIndex+1} / ${this.elementsCollection.length}`;
+            this.counterSpan = document.createElement('span');  
+            this.counterSpan.classList.add('slider-counter') ;
+            this.counterSpan.classList.add('slider-noselect');
+            
+            this.setCounterSpanText();
 
             controlsBar.appendChild(this.autoplayButton);
+            controlsBar.appendChild(this.counterSpan);
 
             this.container.appendChild(controlsBar);
         }
@@ -169,6 +176,10 @@ var sliderJsModule = (function(){
             }
 
             this.isAutoplay = !this.isAutoplay;
+        }
+
+        setCounterSpanText(){
+            this.counterSpan.innerText = `${this.currentIndex+1} / ${this.elementsCollection.length}`;
         }
 
     }

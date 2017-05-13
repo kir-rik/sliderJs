@@ -48,11 +48,17 @@
     z-index: 4;
 }
 
+.slider-controls-bar-button {
+    display: inline-block;    
+    width: 22px;
+}
+
 .slider-controls-bar-button > div {
+    display: inline-block;
     z-index: 5;
 }
 
-.slider-controls-bar-button-start >  div {
+.slider-controls-bar-button-start > div {
     height: 0; 
     width: 0; 
     transition: border-left .25s cubic-bezier(0.0,0.0,0.2,1);
@@ -72,5 +78,11 @@
 }
 
 .slider-counter {
-  
+    display: inline-block;
+    height: 32px;
+    vertical-align: top;
+    margin-left: 10px;
+    color: #ffffff;
+    font-weight: bolder;
+    font-size: 20px;
 }
