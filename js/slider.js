@@ -161,8 +161,10 @@
             
             this.isAutoplay = true;
 
-            this.autoplayButton.classList.add('slider-controls-bar-button-stop');
-            this.autoplayButton.classList.remove('slider-controls-bar-button-start');
+            if (this.autoplayButton){
+                this.autoplayButton.classList.add('slider-controls-bar-button-stop');
+                this.autoplayButton.classList.remove('slider-controls-bar-button-start');
+            }
 
             return this.autoplayIntervalId = setInterval(function(){
                 self.next();
@@ -172,8 +174,10 @@
         stopAutoplay(){
             this.isAutoplay = false;
 
-            this.autoplayButton.classList.add('slider-controls-bar-button-start');
-            this.autoplayButton.classList.remove('slider-controls-bar-button-stop');
+            if (this.autoplayButton){
+                this.autoplayButton.classList.add('slider-controls-bar-button-start');
+                this.autoplayButton.classList.remove('slider-controls-bar-button-stop');
+            }
 
             if (this.autoplayTimerId){
                 clearInterval(this.autoplayTimerId);
@@ -189,7 +193,9 @@
         };
 
         updateCounterSpanText(){
-            this.counterSpan.innerText = `${this.currentIndex+1} / ${this.elementsCollection.length}`;
+            if (this.counterSpan){
+                this.counterSpan.innerText = `${this.currentIndex+1} / ${this.elementsCollection.length}`;
+            }
         };
 
     }
