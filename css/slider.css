@@ -25,10 +25,10 @@
 }
 
 .slider-element {
+    position: absolute;
     top: 0;
     width: 1024px;
     height: 758px;
-    position: absolute;
 }
 
 .slider-container .slider-controls-bar{

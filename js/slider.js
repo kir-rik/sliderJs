@@ -44,7 +44,7 @@
 
         next() {
             var targetIndex = (this.currentIndex+1) % this.elementsCollection.length;
-            this.hideAllBut(this.currentIndex, targetIndex);
+            // this.hideAllBut(this.currentIndex, targetIndex);
 
             hide( this.elementsCollection[this.currentIndex], 'left' );
             show( this.elementsCollection[targetIndex], 'left' );
@@ -57,7 +57,7 @@
         prev() {
             var n = this.elementsCollection.length;
             var targetIndex = ((this.currentIndex - 1) % n + n) % n;
-            this.hideAllBut(this.currentIndex, targetIndex);
+            // this.hideAllBut(this.currentIndex, targetIndex);
 
             hide( this.elementsCollection[this.currentIndex], 'right' );
             show( this.elementsCollection[targetIndex], 'right' );
@@ -83,11 +83,9 @@
             this.container.classList.add('slider-noselect');
 
             // this.container.onmouseover = function(){
-            //     console.log('mouseover');
             //     self.pause();
             // }
             // this.container.onmouseout = function(){
-            //     console.log('mouseout');
             //     self.unPause();
             // }
 
@@ -124,10 +122,12 @@
 
             var controlsBar = document.createElement('div');  
             controlsBar.classList.add("slider-controls-bar");
-            controlsBar.addEventListener("click", function(event){
-                event.stopPropagation();
-            });
 
+            controlsBar.addEventListener("click", _stopPropagation);
+            controlsBar.addEventListener("mouseover", _stopPropagation);
+            controlsBar.addEventListener("mouseout", _stopPropagation);
+
+            
             this.autoplayButton = document.createElement('a');
             this.autoplayButton.appendChild(document.createElement('div'));  
             this.autoplayButton.classList.add("slider-controls-bar-button");
@@ -163,6 +163,7 @@
                 this.autoplayButton.classList.remove('slider-controls-bar-button-start');
             }
 
+            console.log('startAutoplay');
             return this.autoplayIntervalId = setInterval(function(){
                 self.next();
             }, this.autoplayInterval);
@@ -177,6 +178,7 @@
             }
 
             if (this.autoplayTimerId){
+                console.log('stopAutoplay');
                 clearInterval(this.autoplayTimerId);
             }
         };
@@ -209,7 +211,6 @@
             if (this.isPaused) {
                 console.log('unpause!');
                 this.isPaused = false;
-                // next();
                 this.startAutoplay();
             }
         }
@@ -258,6 +259,10 @@
             elem.classList.add('slide-right-in');
         }
     };
+
+    function _stopPropagation(event){
+        event.stopPropagation();
+    }
 
     window.SliderJs = SliderJs;
 
