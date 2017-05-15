@@ -32,8 +32,6 @@
                 this.hideAllBut(this.currentIndex);
             }
 
-            this.addSlideButtons();
-
             if (!config.hideControls){
                 this.addControlsBar();
             }
@@ -119,30 +117,6 @@
                     this.elementsCollection[i].style.height = config.height+'px';
                 }
             }
-        }
-
-        addSlideButtons() {
-            // var self = this;
-
-            // var left = document.createElement('div');
-            // left.classList.add("slider-slide-button");
-            // left.classList.add("slider-noselect");
-            // left.style.left='0';
-            // left.onclick = function () {
-            //     self.prev();
-            // };
-            
-            // var right = document.createElement('div');
-            // right.classList.add("slider-slide-button");
-            // right.classList.add("slider-noselect");
-            // right.style.right='0';
-            // right.onclick = function () {
-            //     self.next();
-            // };
-
-            // this.container.appendChild(left);
-            // this.container.appendChild(right);
-            
         }
 
         addControlsBar() {
