@@ -69,10 +69,8 @@
 
         getElements() {
             var elements = [];
-            for (var i = 0; i < this.container.childNodes.length; i++) {
-                if (this.container.childNodes[i].nodeType == 1){
-                    elements.push(this.container.childNodes[i]);
-                }
+            for (var i = 0; i < this.container.children.length; i++) {
+                elements.push(this.container.children[i]);
             }
             return elements;
         };
