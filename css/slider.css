@@ -25,9 +25,10 @@
 }
 
 .slider-element {
-    z-index:2;
+    top: 0;
     width: 1024px;
     height: 758px;
+    position: absolute;
 }
 
 .slider-container .slider-controls-bar{
@@ -85,4 +86,70 @@
     color: #ffffff;
     font-weight: bolder;
     font-size: 20px;
+}
+
+.slide-hide {
+    display: none;
+}
+
+
+.slide-right-out {
+    animation-name: slide-right-out;
+    animation-duration: .5s;
+    animation-fill-mode: forwards;
+
+}
+.slide-right-in {
+    animation-name: slide-right-in;
+    animation-duration: .5s;
+    animation-fill-mode: forwards;
+}
+
+.slide-left-out {
+    animation-name: slide-left-out;
+    animation-duration: .5s;
+    animation-fill-mode: forwards;
+
+}
+.slide-left-in {
+    animation-name: slide-left-in;
+    animation-duration: .5s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes slide-left-out {
+    from {
+        left: 0;
+    }
+    to {
+        left: -100%;
+    }
+}
+
+@keyframes slide-left-in {
+    from {
+        left: 100%;
+    }
+    to {
+        left: 0;
+    }
+}
+
+@keyframes slide-right-out {
+    from {
+        left: 0;
+    }
+    to {
+        left: 100%;
+    }
+
+}
+
+@keyframes slide-right-in {
+    from {
+        left: -100%;
+    }
+    to {
+        left: 0;
+    }
 }

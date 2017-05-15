@@ -4,7 +4,6 @@
      * Turns container into slider
      */
     class SliderJs {
-
         /**
          * Turns container into slider
          * @param {string} sourceId - slider container id
@@ -20,7 +19,8 @@
             this.config = config;
             this.currentIndex = (config.start || 1 ) - 1;               
             this.isAutoplay = config.autoplay || config.autoplay == undefined;
-            this.autoplayInterval = config.autoplayInterval || 3000;     
+            this.autoplayInterval = config.autoplayInterval || 3000;   
+            this.isPaused = false;  
             
             this.container = document.getElementById(sourceId);
             this.setupContainer();
@@ -29,9 +29,8 @@
             this.setupElements();
 
             for (var i = 0; i < this.elementsCollection.length; i++) {
-                hide(this.elementsCollection[i]);
+                this.hideAllBut(this.currentIndex);
             }
-            show(this.elementsCollection[this.currentIndex]);
 
             this.addSlideButtons();
 
@@ -46,24 +45,27 @@
         };
 
         next() {
-            hide( this.elementsCollection[this.currentIndex] );
-            if ( this.currentIndex < this.elementsCollection.length -1 ) {
-                this.currentIndex++;
-            } else {
-                this.currentIndex = 0;
-            }
-            show( this.elementsCollection[this.currentIndex] );
+            var targetIndex = (this.currentIndex+1) % this.elementsCollection.length;
+            this.hideAllBut(this.currentIndex, targetIndex);
+
+            hide( this.elementsCollection[this.currentIndex], 'left' );
+            show( this.elementsCollection[targetIndex], 'left' );
+
+            this.currentIndex = targetIndex;
+
             this.updateCounterSpanText();
         };
 
         prev() {
-            hide( this.elementsCollection[this.currentIndex] );
-            if ( this.currentIndex > 0 ){
-                this.currentIndex--;
-            } else {
-                this.currentIndex = this.elementsCollection.length - 1;
-            }
-            show( this.elementsCollection[this.currentIndex] );
+            var n = this.elementsCollection.length;
+            var targetIndex = ((this.currentIndex - 1) % n + n) % n;
+            this.hideAllBut(this.currentIndex, targetIndex);
+
+            hide( this.elementsCollection[this.currentIndex], 'right' );
+            show( this.elementsCollection[targetIndex], 'right' );
+
+            this.currentIndex = targetIndex;
+
             this.updateCounterSpanText();
         };
 
@@ -78,8 +80,26 @@
         };
 
         setupContainer() {
+            var self = this;
             this.container.classList.add("slider-container");
             this.container.classList.add('slider-noselect');
+
+            // this.container.onmouseover = function(){
+            //     console.log('mouseover');
+            //     self.pause();
+            // }
+            // this.container.onmouseout = function(){
+            //     console.log('mouseout');
+            //     self.unPause();
+            // }
+
+            this.container.addEventListener("click", function(event){
+                if (event.clientX > self.container.offsetWidth/2){
+                    self.next();
+                } else {
+                    self.prev();
+                }
+            });
 
             if (this.config.width) {
                 this.container.style.width = this.config.width+'px';
@@ -102,26 +122,26 @@
         }
 
         addSlideButtons() {
-            var self = this;
+            // var self = this;
 
-            var left = document.createElement('div');
-            left.classList.add("slider-slide-button");
-            left.classList.add("slider-noselect");
-            left.style.left='0';
-            left.onclick = function () {
-                self.prev();
-            };
+            // var left = document.createElement('div');
+            // left.classList.add("slider-slide-button");
+            // left.classList.add("slider-noselect");
+            // left.style.left='0';
+            // left.onclick = function () {
+            //     self.prev();
+            // };
             
-            var right = document.createElement('div');
-            right.classList.add("slider-slide-button");
-            right.classList.add("slider-noselect");
-            right.style.right='0';
-            right.onclick = function () {
-                self.next();
-            };
+            // var right = document.createElement('div');
+            // right.classList.add("slider-slide-button");
+            // right.classList.add("slider-noselect");
+            // right.style.right='0';
+            // right.onclick = function () {
+            //     self.next();
+            // };
 
-            this.container.appendChild(left);
-            this.container.appendChild(right);
+            // this.container.appendChild(left);
+            // this.container.appendChild(right);
             
         }
 
@@ -130,6 +150,9 @@
 
             var controlsBar = document.createElement('div');  
             controlsBar.classList.add("slider-controls-bar");
+            controlsBar.addEventListener("click", function(event){
+                event.stopPropagation();
+            });
 
             this.autoplayButton = document.createElement('a');
             this.autoplayButton.appendChild(document.createElement('div'));  
@@ -139,10 +162,10 @@
                 "slider-controls-bar-button-stop" : 
                 "slider-controls-bar-button-start"
                 );
-
-            this.autoplayButton.onclick = function(){
+            this.autoplayButton.addEventListener("click", function(){
                 self.autoplayButtonClick();
-            };
+            });
+        
 
             this.counterSpan = document.createElement('span');  
             this.counterSpan.classList.add('slider-counter') ;
@@ -198,14 +221,68 @@
             }
         };
 
+        pause(){
+            console.log('pause?');
+            if (this.isAutoplay && !this.isPaused) {
+                console.log('pause!');
+                this.isPaused = true;
+                this.stopAutoplay();
+            }
+        }
+
+        unPause(){
+            console.log('unpause?');
+            if (this.isPaused) {
+                console.log('unpause!');
+                this.isPaused = false;
+                // next();
+                this.startAutoplay();
+            }
+        }
+
+        hideAllBut(but1, but2){
+            for (var i = 0; i < this.elementsCollection.length; i++) {
+                if (i == but1 || i == but2) continue;
+                hide(this.elementsCollection[i]);
+            }
+        }
+
     }
 
-    function hide(elem) {
-        elem.style.display = 'none'
+    function hide(elem, direction) {
+        elem.classList.remove('slide-right-in');
+        elem.classList.remove('slide-left-in');
+        elem.classList.remove('slide-right-out');
+        elem.classList.remove('slide-left-out');
+
+        if (!direction || direction == 'none'){
+            elem.classList.add('slide-hide');
+            return;
+        }
+
+        if (direction == 'left'){
+            elem.classList.add('slide-left-out');
+            return;
+        }
+        if (direction == 'right'){
+            elem.classList.add('slide-right-out');
+            return;
+        }
     };
 
-    function show(elem) {
-        elem.style.display = 'block'
+    function show(elem, direction) {
+        elem.classList.remove('slide-hide');
+        elem.classList.remove('slide-right-in');
+        elem.classList.remove('slide-left-in');
+        elem.classList.remove('slide-right-out');
+        elem.classList.remove('slide-left-out');
+
+        if (direction == 'left'){
+            elem.classList.add('slide-left-in');
+        }
+        if (direction == 'right'){    
+            elem.classList.add('slide-right-in');
+        }
     };
 
     window.SliderJs = SliderJs;
