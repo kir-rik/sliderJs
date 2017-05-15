@@ -3,7 +3,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     {
         autoplay: false, 
         autoplayInterval: 2000, 
-        start: 1
+        start: 1,
+        hideControls: false
     });    
     // var slider2 = new SliderJs('someFancyPictures2', {autoplay: false});    
 });
