@@ -106,12 +106,12 @@
         setupElements() {
             for (var i = 0; i < this.elementsCollection.length; i++) {
                 this.elementsCollection[i].classList.add("slider-element");
-                if (this.config.width) {
-                    this.elementsCollection[i].style.width = config.width+'px';
-                }
-                if (this.config.height) {
-                    this.elementsCollection[i].style.height = config.height+'px';
-                }
+                // if (this.config.width) {
+                //     this.elementsCollection[i].style.width =  this.config.width+'px';
+                // }
+                // if (this.config.height) {
+                //     this.elementsCollection[i].style.height =  this.config.height+'px';
+                // }
             }
         }
 

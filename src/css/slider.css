@@ -1,4 +1,4 @@
-.slider-slide-button{
+.slider-slide-button {
     width:50%;
     height:100%;
     z-index:3;
@@ -17,31 +17,31 @@
 }
 
 .slider-container {
-    overflow: hidden;
     position: relative;
-    z-index:1;
     width: 1024px;
     height: 758px;
+    overflow: hidden;
+    z-index:1;
 }
 
 .slider-element {
     position: absolute;
     top: 0;
-    width: 1024px;
-    height: 758px;
+    width: 100%;
+    height: auto;
 }
 
-.slider-container .slider-controls-bar{
-    transition: opacity .5s cubic-bezier(0.0,0.0,0.2,1);
-    padding: 4px 8px;
-    height: 32px;  
-    background-color: #000000;
-    position: absolute;
-    width: 100%;
-    bottom: 0;
+.slider-container .slider-controls-bar {    
     box-sizing: border-box;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 32px;
+    padding: 4px 8px;
+    transition: opacity .5s cubic-bezier(0.0,0.0,0.2,1);
+    background-color: #000000;
     opacity: 0;
-    z-index: -1;
+    z-index: 5;
 }
 
 .slider-container .slider-controls-bar {
@@ -80,9 +80,9 @@
 
 .slider-counter {
     display: inline-block;
+    margin-left: 10px;
     height: 32px;
     vertical-align: top;
-    margin-left: 10px;
     color: #ffffff;
     font-weight: bolder;
     font-size: 20px;
